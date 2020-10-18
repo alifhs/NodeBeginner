@@ -1,6 +1,5 @@
 "use strict";
 
-// const products = [];
 var Product = require('../models/product');
 
 exports.getAddProduct = function (req, res, next) {
@@ -22,21 +21,15 @@ exports.postAddProduct = function (req, res, next) {
   res.redirect("/");
 };
 
-exports.getProduct = function (req, res) {
-  // res.sendFile(path.join(rootDir, "views", "shop.html"));
-  // console.log(__dirname);
-  // res.render("shop", {
-  //         kindOfDay: day
-  // });
-  // const products = Product.fetchAll();
+exports.getProducts = function (req, res, next) {
   Product.fetchAll(function (products) {
-    res.render('shop/product-list', {
+    res.render('admin/products', {
       prods: products,
-      pageTitle: 'Shop',
-      path: '/',
+      pageTitle: 'Admin Products',
+      path: 'admin/products',
       hasProducts: products.length > 0,
       activeShop: true,
       productCSS: true
     });
-  }); // console.log(adminRoute.products)
+  });
 };
