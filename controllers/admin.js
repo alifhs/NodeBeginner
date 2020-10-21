@@ -16,9 +16,13 @@ exports.getAddProduct = (req, res, next) => {
   
     console.log(req.url);
     console.log(req.body);
+    const title = req.body.title;
+    const imageUrl = req.body.imageUrl;
+    const price = req.body.price;
+    const description = req.body.description;
   
     // products.push({title: req.body.title})
-    const product = new Product(req.body.title);
+    const product = new Product(title, imageUrl, description, price);
     product.save();
   
   
