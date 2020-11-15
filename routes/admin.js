@@ -5,7 +5,8 @@ const path = require('path');
 
 const rootDir = require('../util/path');
 
-const adminController = require('../controllers/admin')
+const adminController = require('../controllers/admin');
+const { route } = require('./shop');
 
 // console.log(__dirname)
 
@@ -36,6 +37,10 @@ router.get('/products', adminController.getProducts);
 
 
 router.post("/add-product", adminController.postAddProduct);
+
+router.get('/edit-product/:productId', adminController.getEditProduct);   //:productId , this segment of the path means dynamic portion of the path
+router.post('/edit-product', adminController.postEditProduct);
+router.post('/delete-product', adminController.postDeleteProduct);
 
 // router.use("/kkk", (req, res) =>{
 //     console.log(req.url);

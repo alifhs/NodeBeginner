@@ -10,7 +10,17 @@ const app = express();
 
 app.set('view engine', 'ejs');
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: true})); //use qs library...middleware returned here are going to let us access the data in JSON format
+
+
+// If extended is false, you can not post "nested object"
+
+// person[name] = 'cw'
+
+// Nested Object = { person: { name: cw } }
+// If extended is true, you can do whatever way that you like.
+// app.use(bodyParser.json());
+// app.use(express.json());
 
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
@@ -42,7 +52,7 @@ app.use(errorController);
 
 
 app.listen(3000, ()=>{
-    console.log("Who is the daddy now?");
+    console.log("listening to port 3000");
 });
 
 

@@ -1,10 +1,11 @@
 // const products = [];
 const Product = require('../models/product');
+const Cart = require('../models/cart');
 
 
 
 
-exports.getProduct = (req, res,) => {
+exports.getProducts = (req, res,) => {
   // res.sendFile(path.join(rootDir, "views", "shop.html"));
   // console.log(__dirname);
   // res.render("shop", {
@@ -29,6 +30,16 @@ exports.getProduct = (req, res,) => {
   // console.log(adminRoute.products)
 }
 
+exports.getProduct = (req, res, next)=>{
+  const prodId = req.params.productId;
+    Product.findById(prodId, product=>{
+        res.render('shop/product-details', {
+            product: product, pageTitle: product.title , path:'/'
+        });
+    });
+  
+}
+
 exports.getIndex = (req, res, next) => {
 
   Product.fetchAll((products) => {
@@ -45,11 +56,45 @@ exports.getIndex = (req, res, next) => {
 }
 
 exports.getCart = (req, res, next) => {
-  res.render('shop/cart', {
-      path : '/cart',
-      pageTitle : 'Your Cart',
+  Cart.getCartProducts(cart => {
+    const cartProducts = [];
+    Product.fetchAll(products=>{  //when there will be callback and our resposne depend on the call back we have to put the response code block to async function
       
-  })  
+      for(product of products){
+        const cartProductData = cart.products.find(prod => prod.id === product.id);
+        if(cartProductData){
+          console.log(product.price);
+          console.log(cartProductData.qty)
+          cartProducts.push({productData: product, qty: cartProductData.qty});
+        }
+      }
+      res.render('shop/cart', {
+        path : '/cart',
+        pageTitle : 'Your Cart',
+        products: cartProducts
+        
+    }) 
+    })
+    // console.log(cartProducts.length);
+    
+  })
+ 
+}
+
+exports.postCartDeleteProduct = (req, res, next) => {
+   const prodId = req.body.productId;
+   const prodPrice = req.body.productPrice;
+   Cart.deleteProduct(prodId, prodPrice);
+   res.redirect('/cart');
+}
+
+exports.postCart = (req, res, next) =>{
+    const prodId = req.body.productId;
+    // console.log(prodId);
+    Product.findById(prodId, product=>{
+        Cart.addProduct(prodId, product.price);
+    })
+    res.redirect('/cart');
 }
 exports.getOrders = (req, res, next) => {
   res.render('shop/orders', {
