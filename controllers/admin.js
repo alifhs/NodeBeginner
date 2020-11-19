@@ -79,10 +79,14 @@ exports.postDeleteProduct = (req, res, next) =>{
   
     // products.push({title: req.body.title})
     const product = new Product(null, title, imageUrl, description, price);
-    product.save();
-  
-  
+    product.save().then(()=>{
+      
     res.redirect("/");
+    }
+        
+    ).catch(err=> console.log(err));
+  
+  
   }
 
   exports.postEditProduct = (req, res, next)=>{
